@@ -48,7 +48,7 @@ if menu == "Researcher Profile":
     st.write(f"**Institution:** {institution}")
     
     st.image(
-    "https://www.freepik.com/free-photo/weather-effects-composition_33609774.htm#fromView=keyword&page=1&position=2&uuid=5d317e7c-5856-4097-a2fa-4027f7fdabf0&query=Severe+weather+storm",
+    "https://drive.google.com/file/d/1rzSZ5MzOURJQ3vUMep7agrZGJZHNCT4D/view?usp=drive_link",
     caption="Nature (Pixabay)"
 )
 
@@ -134,3 +134,4 @@ elif menu == "Contact":
     email = "jane.doe@example.com"
 
     st.write(f"You can reach me at {email}.")
+
