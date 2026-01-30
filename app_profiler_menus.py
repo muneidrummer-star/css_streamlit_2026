@@ -6,10 +6,7 @@ import numpy as np
 # Page Config
 # --------------------------------------------------
 st.set_page_config(
-    page_title="Researcher Profile | STEM Data Explorer",
-    page_icon="🌍",
-    layout="wide"
-)
+    page_title="Researcher Profile | STEM Data Explorer", page_icon="🌍", layout="wide")
 
 # --------------------------------------------------
 # Sidebar Navigation
@@ -195,3 +192,4 @@ elif menu == "Contact":
 
     st.info("Email: muneidrummer@gmail.com")
     st.success("LinkedIn: https://www.linkedin.com/in/munei-mugeri-09502b14b/")
+
