@@ -38,9 +38,9 @@ if menu == "Researcher Profile":
     st.sidebar.header("Profile Options")
 
     # Collect basic information
-    name = "Dr. Jane Doe"
-    field = "Astrophysics"
-    institution = "University of Science"
+    name = "Mr. Munei Mugeri"
+    field = "Meteorology"
+    institution = "University of Pretoria"
 
     # Display basic profile information
     st.write(f"**Name:** {name}")
@@ -48,7 +48,7 @@ if menu == "Researcher Profile":
     st.write(f"**Institution:** {institution}")
     
     st.image(
-    "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg",
+    "https://www.freepik.com/free-photo/weather-effects-composition_33609774.htm#fromView=keyword&page=1&position=2&uuid=5d317e7c-5856-4097-a2fa-4027f7fdabf0&query=Severe+weather+storm",
     caption="Nature (Pixabay)"
 )
 
@@ -132,4 +132,5 @@ elif menu == "Contact":
     # Add a contact section
     st.header("Contact Information")
     email = "jane.doe@example.com"
+
     st.write(f"You can reach me at {email}.")
