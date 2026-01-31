@@ -102,7 +102,7 @@ CITIES = {
 # ==================================================
 # Sidebar Navigation
 # ==================================================
-st.sidebar.title("🧭 Navigation")
+st.sidebar.title("Navigation")
 menu = st.sidebar.radio(
     "Go to:",
     ["Researcher Profile", "Publications", "Weather and Climate Data Explorer", "Contact"]
@@ -164,10 +164,10 @@ if menu == "Researcher Profile":
 
     st.divider()
     c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Years Experience", "5+")
-    c2.metric("Projects", "12")
+    c1.metric("Years Experience", "3+")
+    c2.metric("Projects", "6")
     c3.metric("Datasets", "30+")
-    c4.metric("Publications", "8")
+    c4.metric("Publications", "5")
 
 # ==================================================
 # Publications
@@ -180,7 +180,7 @@ elif menu == "Publications":
         df = pd.read_csv(uploaded)
         st.dataframe(df, use_container_width=True)
 
-        keyword = st.text_input("🔎 Filter by keyword")
+        keyword = st.text_input("Filter by keyword")
         if keyword:
             df = df[df.apply(
                 lambda r: keyword.lower() in r.astype(str).str.lower().values,
@@ -258,4 +258,5 @@ elif menu == "Contact":
     st.markdown("**Open to collaborations, research partnerships, and climate-related projects.**")
     st.info("📧 Email: muneidrummer@gmail.com")
     st.success("🔗 LinkedIn: https://www.linkedin.com/in/munei-mugeri-09502b14b/")
+
 
