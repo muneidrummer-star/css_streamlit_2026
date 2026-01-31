@@ -119,7 +119,7 @@ menu = st.sidebar.radio(
 # Researcher Profile
 # ==================================================
 if menu == "Researcher Profile":
-    st.title("👨‍🔬 Researcher Profile")
+    st.title("Researcher Profile")
 
     col1, col2 = st.columns([1, 2])
 
@@ -218,24 +218,7 @@ elif menu == "Weather and Climate Data Explorer":
         st.dataframe(weather_df.drop(columns=["Latitude", "Longitude"]), use_container_width=True)
         st.bar_chart(weather_df.set_index("City")["Temperature (°C)"])
 
-        st.subheader("🗺️ Weather Map with Radar Overlay")
 
-        temp_layer = pdk.Layer(
-            "ScatterplotLayer",
-            data=weather_df,
-            get_position='[Longitude, Latitude]',
-            get_radius=45000,
-            get_fill_color='[255, 140 - Temperature * 4, 0]',
-            pickable=True
-        )
-
-        radar_layer = pdk.Layer(
-            "TileLayer",
-            data=None,
-            get_tile_data=get_radar_tile_url(),
-            tile_size=256,
-            opacity=0.6
-        )
 
         view_state = pdk.ViewState(
             latitude=weather_df["Latitude"].mean(),
@@ -268,3 +251,4 @@ elif menu == "Contact":
     st.markdown("**Open to collaborations, research partnerships, and climate-related projects.**")
     st.info("📧 Email: muneidrummer@gmail.com")
     st.success("🔗 LinkedIn: https://www.linkedin.com/in/munei-mugeri-09502b14b/")
+
