@@ -118,11 +118,19 @@ if menu == "Researcher Profile":
     col1, col2 = st.columns([1, 2])
 
     with col1:
-        st.image(
-            "https://images.unsplash.com/photo-1500673922987-e212871fec22",
-            caption="Thunderstorm & Atmospheric Dynamics",
-            use_container_width=True
-        )
+        storm_image_path = os.path.join(
+    os.path.dirname(__file__),
+    "thunderstorms.jpg"
+)
+
+storm_img = Image.open(storm_image_path)
+
+st.image(
+    storm_img,
+    caption="Thunderstorm & Atmospheric Dynamics",
+    use_container_width=True
+)
+
 
     with col2:
         # Name + personal photo side-by-side
@@ -276,4 +284,5 @@ elif menu == "Contact":
 
     st.info("📧 Email: muneidrummer@gmail.com")
     st.success("🔗 LinkedIn: https://www.linkedin.com")
+
 
