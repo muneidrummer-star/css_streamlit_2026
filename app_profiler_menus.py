@@ -120,9 +120,14 @@ if menu == "Researcher Profile":
         storm_image_path = os.path.join(os.path.dirname(__file__), "thunderstorms.jpg")
         if os.path.exists(storm_image_path):
             storm_img = Image.open(storm_image_path)
+            # Resize the image to be more portrait (taller)
+            width, height = storm_img.size
+            new_height = int(width * 1.5)  # make height 1.5x width for portrait effect
+            storm_img = storm_img.resize((width, new_height))
             st.image(storm_img, caption="Thunderstorms", use_container_width=True)
         else:
             st.warning("Storm image not found.")
+
 
     with col2:
         name_col, photo_col = st.columns([3, 1])
@@ -253,3 +258,4 @@ elif menu == "Contact":
     st.markdown("**Open to collaborations, research partnerships, and climate-related projects.**")
     st.info("📧 Email: muneidrummer@gmail.com")
     st.success("🔗 LinkedIn: https://www.linkedin.com/in/munei-mugeri-09502b14b/")
+
