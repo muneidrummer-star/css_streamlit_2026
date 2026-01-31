@@ -105,7 +105,7 @@ def get_forecast(city):
 st.sidebar.title("🧭 Navigation")
 menu = st.sidebar.radio(
     "Go to:",
-    ["Researcher Profile", "Publications", "Weather and Climate data explorer", "Contact"]
+    ["Researcher Profile", "Publications", "Weather and Climate Data Explorer", "Contact"]
 )
 
 # ==================================================
@@ -127,7 +127,7 @@ if menu == "Researcher Profile":
 
         st.image(
             storm_img,
-            caption="Thunderstorm & Atmospheric Dynamics",
+            caption="Thunderstorms",
             use_container_width=True
         )
 
@@ -207,8 +207,8 @@ elif menu == "Publications":
 # ==================================================
 # STEM Data Explorer (Weather, Maps, Forecast)
 # ==================================================
-elif menu == "STEM Data Explorer":
-    st.title("🌦️ Climate & Weather Explorer")
+elif menu == "Weather & Climate Data Explorer":
+    st.title("🌦️ Weather & Climate Explorer")
 
     selected_cities = st.multiselect(
         "Select cities",
@@ -283,6 +283,7 @@ elif menu == "Contact":
 
     st.info("📧 Email: muneidrummer@gmail.com")
     st.success("🔗 LinkedIn: https://www.linkedin.com/in/munei-mugeri-09502b14b/")
+
 
 
 
