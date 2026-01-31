@@ -3,6 +3,8 @@ import pandas as pd
 import requests
 from datetime import datetime
 import pydeck as pdk
+from PIL import Image
+import os
 
 # ==================================================
 # Page Configuration
@@ -131,8 +133,12 @@ if menu == "Researcher Profile":
             st.markdown("**Meteorologist | Climate & Atmospheric Scientist**")
 
         with photo_col:
+            image_path = os.path.join(os.path.dirname(__file__), "myself.jpg")
+
+            profile_img = Image.open(image_path)
+
             st.image(
-                "myself.jpg",
+                profile_img,
                 use_container_width=True
             )
 
@@ -270,3 +276,4 @@ elif menu == "Contact":
 
     st.info("📧 Email: muneidrummer@gmail.com")
     st.success("🔗 LinkedIn: https://www.linkedin.com")
+
