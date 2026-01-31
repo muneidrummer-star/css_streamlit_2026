@@ -207,7 +207,7 @@ elif menu == "Publications":
 # ==================================================
 # STEM Data Explorer (Weather, Maps, Forecast)
 # ==================================================
-elif menu == "Weather & Climate Data Explorer":
+elif menu == "Weather and Climate Data Explorer":
     st.title("🌦️ Weather & Climate Explorer")
 
     selected_cities = st.multiselect(
@@ -283,6 +283,7 @@ elif menu == "Contact":
 
     st.info("📧 Email: muneidrummer@gmail.com")
     st.success("🔗 LinkedIn: https://www.linkedin.com/in/munei-mugeri-09502b14b/")
+
 
 
 
