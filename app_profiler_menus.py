@@ -119,17 +119,17 @@ if menu == "Researcher Profile":
 
     with col1:
         storm_image_path = os.path.join(
-    os.path.dirname(__file__),
-    "thunderstorms.jpg"
-)
+            os.path.dirname(__file__),
+            "thunderstorms.jpg"
+        )
 
-storm_img = Image.open(storm_image_path)
+        storm_img = Image.open(storm_image_path)
 
-st.image(
-    storm_img,
-    caption="Thunderstorm & Atmospheric Dynamics",
-    use_container_width=True
-)
+        st.image(
+            storm_img,
+            caption="Thunderstorm & Atmospheric Dynamics",
+            use_container_width=True
+        )
 
 
     with col2:
@@ -284,5 +284,6 @@ elif menu == "Contact":
 
     st.info("📧 Email: muneidrummer@gmail.com")
     st.success("🔗 LinkedIn: https://www.linkedin.com")
+
 
 
