@@ -112,22 +112,34 @@ menu = st.sidebar.radio(
 if menu == "Researcher Profile":
     st.title("👨‍🔬 Researcher Profile")
 
+    # --- Top section: Thunderstorm image + Profile info ---
     col1, col2 = st.columns([1, 2])
 
     with col1:
         st.image(
-            "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
+            "https://images.unsplash.com/photo-1500673922987-e212871fec22",
+            caption="Thunderstorm & Atmospheric Dynamics",
             use_container_width=True
         )
 
     with col2:
-        st.subheader("Mr. Munei Mugeri")
-        st.markdown("**Meteorologist | Climate & Atmospheric Scientist**")
+        # Name + personal photo side-by-side
+        name_col, photo_col = st.columns([3, 1])
+
+        with name_col:
+            st.subheader("Mr. Munei Mugeri")
+            st.markdown("**Meteorologist | Climate & Atmospheric Scientist**")
+
+        with photo_col:
+            st.image(
+                "myself.jpg",
+                use_container_width=True
+            )
 
         st.markdown("""
         I am a meteorology researcher specializing in **climate variability,
         weather extremes, and atmospheric data analysis**, with a strong focus
-        on Southern African climate systems.
+        on Southern African climate systems and convective weather phenomena.
         """)
 
         st.markdown("""
@@ -208,7 +220,6 @@ elif menu == "STEM Data Explorer":
 
         st.bar_chart(weather_df.set_index("City")["Temperature (°C)"])
 
-        # ---------------- WEATHER MAP ----------------
         st.subheader("🗺️ Weather Map (Temperature Intensity)")
 
         layer = pdk.Layer(
@@ -232,7 +243,6 @@ elif menu == "STEM Data Explorer":
             tooltip={"text": "{City}\nTemp: {Temperature (°C)} °C"}
         ))
 
-        # ---------------- FORECAST ----------------
         st.divider()
         st.subheader("⏱️ 5-Day Time-Series Forecast")
 
