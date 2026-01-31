@@ -179,7 +179,7 @@ elif menu == "Publications":
             st.subheader("📈 Publication Trends")
             st.line_chart(df["Year"].value_counts().sort_index())
 
-# Weather and climate data explorer info
+# Weather & Climate Data Explorer
 elif menu == "Weather and Climate Data Explorer":
     st.title("🌦️ Weather & Climate Explorer")
 
@@ -201,8 +201,18 @@ elif menu == "Weather and Climate Data Explorer":
         st.dataframe(weather_df.drop(columns=["Latitude", "Longitude"]), use_container_width=True)
         st.bar_chart(weather_df.set_index("City")["Temperature (°C)"])
 
+        st.divider()
         st.subheader("🗺️ Weather Map")
 
+        # --- Overlay selection ---
+        overlay_option = st.radio(
+            "Choose map overlay",
+            ["Temperature Only", "Radar Data", "Satellite Data"]
+        )
+
+        layers = []
+
+        # Temperature scatter points
         temp_layer = pdk.Layer(
             "ScatterplotLayer",
             data=weather_df,
@@ -211,7 +221,34 @@ elif menu == "Weather and Climate Data Explorer":
             get_fill_color='[255, 140 - Temperature * 4, 0]',
             pickable=True
         )
+        layers.append(temp_layer)
 
+        # Overlay tiles
+        if overlay_option == "Radar Data":
+            radar_url = "https://tilecache.rainviewer.com/v2/radar/nowcast/256/{z}/{x}/{y}/2/1_1.png"
+            radar_layer = pdk.Layer(
+                "TileLayer",
+                data=None,
+                get_tile_data=radar_url,
+                tile_size=256,
+                opacity=0.5,
+                pickable=False
+            )
+            layers.append(radar_layer)
+        elif overlay_option == "Satellite Data":
+            # Using OpenWeatherMap Clouds Tile Layer
+            satellite_url = "https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=" + API_KEY
+            satellite_layer = pdk.Layer(
+                "TileLayer",
+                data=None,
+                get_tile_data=satellite_url,
+                tile_size=256,
+                opacity=0.5,
+                pickable=False
+            )
+            layers.append(satellite_layer)
+
+        # PyDeck map view
         view_state = pdk.ViewState(
             latitude=weather_df["Latitude"].mean(),
             longitude=weather_df["Longitude"].mean(),
@@ -220,8 +257,9 @@ elif menu == "Weather and Climate Data Explorer":
 
         st.pydeck_chart(
             pdk.Deck(
-                layers=[temp_layer],
+                layers=layers,
                 initial_view_state=view_state,
+                map_style="mapbox://styles/mapbox/light-v10",  # light map style
                 tooltip={"text": "{City}\nTemp: {Temperature (°C)} °C"}
             )
         )
@@ -235,12 +273,14 @@ elif menu == "Weather and Climate Data Explorer":
             forecast_df = forecast_df.set_index("Datetime")
             st.line_chart(forecast_df[["Temperature (°C)", "Humidity (%)", "Rain (mm)", "Precip Prob (%)"]])
 
+
 # Add a contact section
 elif menu == "Contact":
     st.title("Contact")
     st.markdown("**For collaborations, research partnerships, and climate-related projects, you can reach me at:**")
     st.info("📧 Email: muneidrummer@gmail.com")
     st.success("🔗 LinkedIn: https://www.linkedin.com/in/munei-mugeri-09502b14b/")
+
 
 
 
