@@ -1,195 +1,222 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import requests
+from datetime import datetime
 
-# --------------------------------------------------
+# ==================================================
 # Page Config
-# --------------------------------------------------
+# ==================================================
 st.set_page_config(
-    page_title="Researcher Profile | STEM Data Explorer", page_icon="🌍", layout="wide")
-
-# --------------------------------------------------
-# Sidebar Navigation
-# --------------------------------------------------
-st.sidebar.title("Navigation")
-menu = st.sidebar.radio(
-    "Go to:",
-    ["Researcher Profile", "Publications", "STEM Data Explorer", "Contact"],
+    page_title="Researcher Profile | STEM & Climate Explorer",
+    page_icon="🌍",
+    layout="wide"
 )
 
-# --------------------------------------------------
-# Dummy STEM Data
-# --------------------------------------------------
-physics_data = pd.DataFrame({
-    "Experiment": ["Alpha Decay", "Beta Decay", "Gamma Ray Analysis", "Quark Study", "Higgs Boson"],
-    "Energy (MeV)": [4.2, 1.5, 2.9, 3.4, 7.1],
-    "Date": pd.date_range(start="2024-01-01", periods=5),
-})
+# ==================================================
+# Custom Academic Theme (CSS)
+# ==================================================
+st.markdown("""
+<style>
+html, body, [class*="css"]  {
+    font-family: 'Segoe UI', sans-serif;
+}
+h1, h2, h3 {
+    color: #1f3c88;
+}
+.stMetric {
+    background-color: #f5f7fa;
+    padding: 15px;
+    border-radius: 10px;
+}
+[data-testid="stSidebar"] {
+    background-color: #f0f2f6;
+}
+</style>
+""", unsafe_allow_html=True)
 
-astronomy_data = pd.DataFrame({
-    "Celestial Object": ["Mars", "Venus", "Jupiter", "Saturn", "Moon"],
-    "Brightness (Magnitude)": [-2.0, -4.6, -1.8, 0.2, -12.7],
-    "Observation Date": pd.date_range(start="2024-01-01", periods=5),
-})
+# ==================================================
+# Helper Functions
+# ==================================================
+def load_cv():
+    with open("Munei_Mugeri_CV.pdf", "rb") as file:
+        return file.read()
 
-weather_data = pd.DataFrame({
-    "City": ["Cape Town", "London", "New York", "Tokyo", "Sydney"],
-    "Temperature (°C)": [25, 10, -3, 15, 30],
-    "Humidity (%)": [65, 70, 55, 80, 50],
-    "Recorded Date": pd.date_range(start="2024-01-01", periods=5),
-})
+def get_current_weather(city, api_key):
+    url = (
+        f"https://api.openweathermap.org/data/2.5/weather"
+        f"?q={city}&appid={api_key}&units=metric"
+    )
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        return {
+            "City": city,
+            "Temperature (°C)": data["main"]["temp"],
+            "Humidity (%)": data["main"]["humidity"],
+            "Condition": data["weather"][0]["description"].title(),
+            "Wind (m/s)": data["wind"]["speed"]
+        }
+    return None
+
+def get_weather_forecast(city, api_key):
+    url = (
+        f"https://api.openweathermap.org/data/2.5/forecast"
+        f"?q={city}&appid={api_key}&units=metric"
+    )
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        records = []
+        for item in data["list"]:
+            records.append({
+                "Datetime": datetime.fromtimestamp(item["dt"]),
+                "Temperature (°C)": item["main"]["temp"],
+                "Humidity (%)": item["main"]["humidity"]
+            })
+        return pd.DataFrame(records)
+    return None
+
+# ==================================================
+# Sidebar Navigation
+# ==================================================
+st.sidebar.title("🧭 Navigation")
+menu = st.sidebar.radio(
+    "Go to:",
+    ["Researcher Profile", "Publications", "STEM Data Explorer", "Contact"]
+)
 
 # ==================================================
 # Researcher Profile
 # ==================================================
 if menu == "Researcher Profile":
-    st.title("Researcher Profile")
+    st.title("👨‍🔬 Researcher Profile")
 
     col1, col2 = st.columns([1, 2])
 
     with col1:
         st.image(
             "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
-            caption="Climate & Atmosphere Research",
             use_column_width=True
         )
 
     with col2:
         st.subheader("Mr. Munei Mugeri")
-        st.markdown("**Meteorologist | Climate & Atmospheric Researcher**")
+        st.markdown("**Meteorologist | Climate & Atmospheric Scientist**")
 
         st.markdown("""
-         **Short Bio**  
-        I am a highly motivated, enthusiastic, versatile, and hardworking researcher
-        with a strong academic background in meteorologu and experience in air quality
-        management. I am a dedicated, innovative person who values collective thought
-        in solving problems and pursuit for excellence.
+        I am a meteorology researcher with interests in **climate variability, weather extremes,
+        and data-driven atmospheric analysis**. My work focuses on applying scientific methods
+        and modern data tools to real-world environmental challenges.
         """)
 
         st.markdown("""
-         **Institution:** University of Pretoria  
-         **Currently Working On:** Remote Sensing Research  
-         **Research Interests:**  
-        - Hail estimates  
-        - Radar algorithms  
-        - Moisture sources & transport  
+        **🏛️ Institution:** University of Pretoria  
+        **📍 Current Focus:** Climate data analysis & weather modeling  
+        **🔬 Research Interests:**  
+        - Climate Change & Variability  
+        - Extreme Weather Events  
+        - Environmental Data Science  
         """)
 
         st.markdown(
-            " **LinkedIn:** "
-            "[linkedin.com/in/munei-mugeri](https://www.linkedin.com)"
+            "🔗 **LinkedIn:** [linkedin.com/in/munei-mugeri](https://www.linkedin.com)"
         )
 
     st.divider()
 
-    # Key Metrics
-    st.subheader("Research Snapshot")
-    m1, m2, m3, m4 = st.columns(4)
-
-    m1.metric("Years of Research", "5+")
-    m2.metric("Projects Completed", "12")
-    m3.metric("Datasets Analyzed", "30+")
-    m4.metric("Publications", "8")
+    st.subheader("📄 Curriculum Vitae")
+    st.download_button(
+        "⬇️ Download CV (PDF)",
+        data=load_cv(),
+        file_name="Munei_Mugeri_CV.pdf",
+        mime="application/pdf"
+    )
 
     st.divider()
 
-    # Simple Visualization
-    st.subheader("Research Focus Areas")
-    focus_data = pd.DataFrame({
-        "Area": ["Climate Analysis", "Weather Forecasting", "Data Science", "Environmental Studies"],
-        "Focus Level": [35, 25, 20, 20]
-    })
-
-    st.bar_chart(
-        focus_data.set_index("Area")
-    )
+    st.subheader("📊 Research Snapshot")
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("Years Experience", "5+")
+    c2.metric("Projects", "12")
+    c3.metric("Datasets", "30+")
+    c4.metric("Publications", "8")
 
 # ==================================================
 # Publications
 # ==================================================
 elif menu == "Publications":
-    st.title("Publications")
-    st.sidebar.header("Upload and Filter")
+    st.title("📚 Publications")
 
-    uploaded_file = st.file_uploader("Upload a CSV of Publications", type="csv")
+    uploaded_file = st.file_uploader("Upload Publications CSV", type="csv")
 
     if uploaded_file:
         publications = pd.read_csv(uploaded_file)
         st.dataframe(publications, use_container_width=True)
 
-        keyword = st.text_input("Filter by keyword")
+        keyword = st.text_input("🔎 Filter by keyword")
         if keyword:
-            filtered = publications[
+            publications = publications[
                 publications.apply(
                     lambda row: keyword.lower() in row.astype(str).str.lower().values,
                     axis=1
                 )
             ]
-            st.write(f"### Results for '{keyword}'")
-            st.dataframe(filtered, use_container_width=True)
+            st.dataframe(publications, use_container_width=True)
 
         if "Year" in publications.columns:
-            st.subheader("Publication Trends")
-            year_counts = publications["Year"].value_counts().sort_index()
-            st.line_chart(year_counts)
+            st.subheader("📈 Publication Trends")
+            st.line_chart(publications["Year"].value_counts().sort_index())
 
 # ==================================================
 # STEM Data Explorer
 # ==================================================
 elif menu == "STEM Data Explorer":
-    st.title("STEM Data Explorer")
-    st.sidebar.header("Data Selection")
+    st.title("🧪 STEM Data Explorer")
 
-    data_option = st.sidebar.selectbox(
-        "Choose a dataset",
-        ["Physics Experiments", "Astronomy Observations", "Weather Data"]
+    api_key = st.secrets["OPENWEATHER_API_KEY"]
+
+    cities = st.multiselect(
+        "Select cities",
+        ["Cape Town", "London", "New York", "Tokyo", "Sydney"],
+        default=["Cape Town"]
     )
 
-    if data_option == "Physics Experiments":
-        st.subheader("Physics Experiments")
-        st.dataframe(physics_data, use_container_width=True)
+    if cities:
+        st.subheader("🌦️ Current Weather Conditions")
+        weather_data = []
 
-        energy_filter = st.slider("Energy (MeV)", 0.0, 10.0, (0.0, 10.0))
-        filtered = physics_data[
-            physics_data["Energy (MeV)"].between(*energy_filter)
-        ]
-        st.bar_chart(filtered.set_index("Experiment")["Energy (MeV)"])
+        for city in cities:
+            data = get_current_weather(city, api_key)
+            if data:
+                weather_data.append(data)
 
-    elif data_option == "Astronomy Observations":
-        st.subheader("Astronomy Observations")
-        st.dataframe(astronomy_data, use_container_width=True)
+        weather_df = pd.DataFrame(weather_data)
+        st.dataframe(weather_df, use_container_width=True)
+        st.bar_chart(weather_df.set_index("City")["Temperature (°C)"])
 
-        brightness_filter = st.slider("Brightness (Magnitude)", -15.0, 5.0, (-15.0, 5.0))
-        filtered = astronomy_data[
-            astronomy_data["Brightness (Magnitude)"].between(*brightness_filter)
-        ]
-        st.line_chart(filtered.set_index("Celestial Object")["Brightness (Magnitude)"])
+        st.divider()
 
-    elif data_option == "Weather Data":
-        st.subheader("Weather Data")
-        st.dataframe(weather_data, use_container_width=True)
+        st.subheader("⏱️ 5-Day Weather Forecast (Time Series)")
+        forecast_city = st.selectbox("Choose city for forecast", cities)
 
-        temp_filter = st.slider("Temperature (°C)", -10.0, 40.0, (-10.0, 40.0))
-        humidity_filter = st.slider("Humidity (%)", 0, 100, (0, 100))
-
-        filtered = weather_data[
-            weather_data["Temperature (°C)"].between(*temp_filter) &
-            weather_data["Humidity (%)"].between(*humidity_filter)
-        ]
-
-        st.area_chart(filtered.set_index("City")[["Temperature (°C)", "Humidity (%)"]])
+        forecast_df = get_weather_forecast(forecast_city, api_key)
+        if forecast_df is not None:
+            forecast_df = forecast_df.set_index("Datetime")
+            st.line_chart(
+                forecast_df[["Temperature (°C)", "Humidity (%)"]]
+            )
 
 # ==================================================
 # Contact
 # ==================================================
 elif menu == "Contact":
-    st.title("Contact")
+    st.title("📬 Contact")
 
     st.markdown("""
-    **Let’s connect!**  
-    Feel free to reach out for collaboration, research discussions, or projects.
+    **Interested in collaboration or research discussions?**  
+    Feel free to reach out.
     """)
 
-    st.info("Email: muneidrummer@gmail.com")
-    st.success("LinkedIn: https://www.linkedin.com/in/munei-mugeri-09502b14b/")
-
+    st.info("📧 Email: muneidrummer@gmail.com")
+    st.success("🔗 LinkedIn: https://www.linkedin.com")
