@@ -5,6 +5,19 @@ import requests
 from datetime import datetime
 
 # ==================================================
+# USER CONFIGURATION (EDIT HERE)
+# ==================================================
+OPENWEATHER_API_KEY = "ed62b3f8bd037b703286ac1ac37e39e8"
+
+DEFAULT_CITIES = [
+    "Pretoria",
+    "Johannesburg",
+    "Cape Town",
+    "Durban",
+    "Polokwane"
+]
+
+# ==================================================
 # Page Config
 # ==================================================
 st.set_page_config(
@@ -18,7 +31,7 @@ st.set_page_config(
 # ==================================================
 st.markdown("""
 <style>
-html, body, [class*="css"]  {
+html, body, [class*="css"] {
     font-family: 'Segoe UI', sans-serif;
 }
 h1, h2, h3 {
@@ -42,10 +55,10 @@ def load_cv():
     with open("Munei_Mugeri_CV.pdf", "rb") as file:
         return file.read()
 
-def get_current_weather(city, api_key):
+def get_current_weather(city):
     url = (
         f"https://api.openweathermap.org/data/2.5/weather"
-        f"?q={city}&appid={api_key}&units=metric"
+        f"?q={city}&appid={OPENWEATHER_API_KEY}&units=metric"
     )
     response = requests.get(url)
     if response.status_code == 200:
@@ -59,10 +72,10 @@ def get_current_weather(city, api_key):
         }
     return None
 
-def get_weather_forecast(city, api_key):
+def get_weather_forecast(city):
     url = (
         f"https://api.openweathermap.org/data/2.5/forecast"
-        f"?q={city}&appid={api_key}&units=metric"
+        f"?q={city}&appid={OPENWEATHER_API_KEY}&units=metric"
     )
     response = requests.get(url)
     if response.status_code == 200:
@@ -102,21 +115,17 @@ if menu == "Researcher Profile":
 
     with col2:
         st.subheader("Mr. Munei Mugeri")
-        st.markdown("**Meteorologist | Climate & Atmospheric Scientist**")
+        st.markdown("**Meteorologist | Remote Sensing Scientist**")
 
         st.markdown("""
-        I am a meteorology researcher with interests in **climate variability, weather extremes,
-        and data-driven atmospheric analysis**. My work focuses on applying scientific methods
-        and modern data tools to real-world environmental challenges.
+        I am a meteorology researcher focused on **climate variability,
+        weather extremes, and data-driven atmospheric analysis**.
         """)
 
         st.markdown("""
-        **🏛️ Institution:** University of Pretoria  
-        **📍 Current Focus:** Climate data analysis & weather modeling  
-        **🔬 Research Interests:**  
-        - Climate Change & Variability  
-        - Extreme Weather Events  
-        - Environmental Data Science  
+        **🏛️ Institution:** South African Weather Service  
+        **📍 Current Work:** Climate data analysis & weather modeling  
+        **🔬 Interests:** Radar algorithms, Moisture sources and transport, Weather Modelling  
         """)
 
         st.markdown(
@@ -174,12 +183,10 @@ elif menu == "Publications":
 elif menu == "STEM Data Explorer":
     st.title("🧪 STEM Data Explorer")
 
-    api_key = st.secrets["OPENWEATHER_API_KEY"]
-
     cities = st.multiselect(
         "Select cities",
-        ["Cape Town", "London", "New York", "Tokyo", "Sydney"],
-        default=["Cape Town"]
+        DEFAULT_CITIES,
+        default=[DEFAULT_CITIES[0]]
     )
 
     if cities:
@@ -187,7 +194,7 @@ elif menu == "STEM Data Explorer":
         weather_data = []
 
         for city in cities:
-            data = get_current_weather(city, api_key)
+            data = get_current_weather(city)
             if data:
                 weather_data.append(data)
 
@@ -200,7 +207,7 @@ elif menu == "STEM Data Explorer":
         st.subheader("⏱️ 5-Day Weather Forecast (Time Series)")
         forecast_city = st.selectbox("Choose city for forecast", cities)
 
-        forecast_df = get_weather_forecast(forecast_city, api_key)
+        forecast_df = get_weather_forecast(forecast_city)
         if forecast_df is not None:
             forecast_df = forecast_df.set_index("Datetime")
             st.line_chart(
@@ -214,8 +221,7 @@ elif menu == "Contact":
     st.title("📬 Contact")
 
     st.markdown("""
-    **Interested in collaboration or research discussions?**  
-    Feel free to reach out.
+    **Open to collaborations, research discussions, and data projects.**
     """)
 
     st.info("📧 Email: muneidrummer@gmail.com")
