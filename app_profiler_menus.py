@@ -7,18 +7,14 @@ from PIL import Image
 import os
 import base64
 
-# ==================================================
-# Page Configuration
-# ==================================================
+# Set page title
 st.set_page_config(
     page_title="Researcher Profile | Climate & STEM Explorer",
     page_icon="🌍",
     layout="wide"
 )
 
-# ==================================================
-# Light Academic Theme
-# ==================================================
+# Set background theme
 st.markdown("""
 <style>
 html, body, [class*="css"] {
@@ -40,9 +36,7 @@ h1, h2, h3 {
 </style>
 """, unsafe_allow_html=True)
 
-# ==================================================
-# Helper Functions
-# ==================================================
+# Set helper functions
 def load_cv():
     path = os.path.join(os.path.dirname(__file__), "Munei_Mugeri_CV.pdf")
     with open(path, "rb") as f:
@@ -83,9 +77,7 @@ def get_forecast(city):
         return pd.DataFrame(records)
     return None
 
-# ==================================================
-# API Key & City Configuration
-# ==================================================
+# Set API Key and Cities
 API_KEY = st.secrets.get("OPENWEATHER_API_KEY")
 if API_KEY is None:
     st.error("OpenWeather API key not found in Streamlit secrets.")
@@ -99,18 +91,14 @@ CITIES = {
     "Polokwane": {"lat": -23.8962, "lon": 29.4486}
 }
 
-# ==================================================
-# Sidebar Navigation
-# ==================================================
+# Sidebar Menu
 st.sidebar.title("Navigation")
 menu = st.sidebar.radio(
     "Go to:",
     ["Researcher Profile", "Publications", "Weather and Climate Data Explorer", "Contact"]
 )
 
-# ==================================================
-# Researcher Profile
-# ==================================================
+# Sections based on menu selection
 if menu == "Researcher Profile":
     st.title("Researcher Profile")
 
@@ -169,17 +157,16 @@ if menu == "Researcher Profile":
     c3.metric("Datasets", "30+")
     c4.metric("Publications", "5")
 
-# ==================================================
-# Publications
-# ==================================================
 elif menu == "Publications":
     st.title("📚 Publications")
 
+    # Upload publications file
     uploaded = st.file_uploader("Upload Publications CSV", type="csv")
     if uploaded:
         df = pd.read_csv(uploaded)
         st.dataframe(df, use_container_width=True)
-
+        
+        # Add filtering for year or keyword
         keyword = st.text_input("Filter by keyword")
         if keyword:
             df = df[df.apply(
@@ -192,9 +179,7 @@ elif menu == "Publications":
             st.subheader("📈 Publication Trends")
             st.line_chart(df["Year"].value_counts().sort_index())
 
-# ==================================================
-# Weather & Climate Data Explorer
-# ==================================================
+# Weather and climate data explorer info
 elif menu == "Weather and Climate Data Explorer":
     st.title("🌦️ Weather & Climate Explorer")
 
@@ -250,13 +235,12 @@ elif menu == "Weather and Climate Data Explorer":
             forecast_df = forecast_df.set_index("Datetime")
             st.line_chart(forecast_df[["Temperature (°C)", "Humidity (%)", "Rain (mm)", "Precip Prob (%)"]])
 
-# ==================================================
-# Contact
-# ==================================================
+# Add a contact section
 elif menu == "Contact":
     st.title("Contact")
-    st.markdown("**Open to collaborations, research partnerships, and climate-related projects.**")
+    st.markdown("**For collaborations, research partnerships, and climate-related projects, you can reach me at:**")
     st.info("📧 Email: muneidrummer@gmail.com")
     st.success("🔗 LinkedIn: https://www.linkedin.com/in/munei-mugeri-09502b14b/")
+
 
 
