@@ -14,21 +14,23 @@ st.set_page_config(
 )
 
 # ==================================================
-# Custom Academic Light Theme
+# Dark Academic Theme (GLOBAL)
 # ==================================================
 st.markdown("""
 <style>
 html, body, [class*="css"] {
+    background-color: #0e1117;
+    color: #e6e6e6;
     font-family: 'Segoe UI', sans-serif;
 }
 h1, h2, h3 {
-    color: #1f3c88;
+    color: #4fa3ff;
 }
 [data-testid="stSidebar"] {
-    background-color: #f0f2f6;
+    background-color: #161b22;
 }
 .stMetric {
-    background-color: #f5f7fa;
+    background-color: #1f2933;
     padding: 15px;
     border-radius: 10px;
 }
