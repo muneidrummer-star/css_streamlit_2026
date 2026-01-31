@@ -42,7 +42,7 @@ def load_cv():
     with open("Munei_Mugeri_CV.pdf", "rb") as file:
         return file.read()
 
-def get_current_weather(city, api_key):
+def get_current_weather(city = "Pretoria", api_key = "ed62b3f8bd037b703286ac1ac37e39e8"):
     url = (
         f"https://api.openweathermap.org/data/2.5/weather"
         f"?q={city}&appid={api_key}&units=metric"
@@ -59,7 +59,7 @@ def get_current_weather(city, api_key):
         }
     return None
 
-def get_weather_forecast(city, api_key):
+def get_weather_forecast(city = "Pretoria", api_key = "ed62b3f8bd037b703286ac1ac37e39e8"):
     url = (
         f"https://api.openweathermap.org/data/2.5/forecast"
         f"?q={city}&appid={api_key}&units=metric"
@@ -83,7 +83,7 @@ def get_weather_forecast(city, api_key):
 st.sidebar.title("🧭 Navigation")
 menu = st.sidebar.radio(
     "Go to:",
-    ["Researcher Profile", "Publications", "STEM Data Explorer", "Contact"]
+    ["Researcher Profile", "Publications", "Weather Data", "Contact"]
 )
 
 # ==================================================
@@ -220,3 +220,4 @@ elif menu == "Contact":
 
     st.info("📧 Email: muneidrummer@gmail.com")
     st.success("🔗 LinkedIn: https://www.linkedin.com")
+
