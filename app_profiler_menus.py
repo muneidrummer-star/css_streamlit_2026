@@ -30,48 +30,6 @@ CITIES = {
 }
 
 # ==================================================
-# Dark / Light Mode Toggle
-# ==================================================
-st.sidebar.title("⚙️ Settings")
-theme_mode = st.sidebar.radio("Theme", ["Light Mode", "Dark Mode"])
-
-if theme_mode == "Dark Mode":
-    st.markdown("""
-    <style>
-    html, body, [class*="css"] {
-        background-color: #0e1117;
-        color: #e0e0e0;
-    }
-    h1, h2, h3 {
-        color: #4fa3ff;
-    }
-    [data-testid="stSidebar"] {
-        background-color: #161b22;
-    }
-    .stMetric {
-        background-color: #1f2933;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-else:
-    st.markdown("""
-    <style>
-    html, body, [class*="css"] {
-        font-family: 'Segoe UI', sans-serif;
-    }
-    h1, h2, h3 {
-        color: #1f3c88;
-    }
-    [data-testid="stSidebar"] {
-        background-color: #f0f2f6;
-    }
-    .stMetric {
-        background-color: #f5f7fa;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-# ==================================================
 # Helper Functions
 # ==================================================
 def load_cv():
@@ -118,10 +76,10 @@ def get_forecast(city):
 # ==================================================
 # Sidebar Navigation
 # ==================================================
-st.sidebar.title("🧭 Navigation")
+st.sidebar.title("Navigation")
 menu = st.sidebar.radio(
     "Go to:",
-    ["Researcher Profile", "Publications", "STEM Data Explorer", "Contact"]
+    ["Researcher Profile", "Publications", "Weather Data & Forecast", "Contact"]
 )
 
 # ==================================================
@@ -143,18 +101,18 @@ if menu == "Researcher Profile":
         st.markdown("**Meteorologist | Climate & Atmospheric Scientist**")
 
         st.markdown("""
-        I am a meteorology researcher specializing in **climate variability,
-        weather extremes, and atmospheric data analysis**, with a focus on
+        I am a researcher in Meteorology specializing in Radar network,
+        moisture sources and transport, and atmospheric data analysis, with a focus on
         Southern African climate systems.
         """)
 
         st.markdown("""
-        **🏛️ Institution:** University of Pretoria  
-        **📍 Focus Area:** Climate analysis & weather modeling  
-        **🔬 Interests:** Climate change, extremes, environmental data science  
+        **🏛️ Institution:** South Africa Weather Service  
+        **📍 Focus Area:** Remote Sensing Research  
+        **🔬 Interests:** Radars, Satellites and Lightning Detection Network  
         """)
 
-        st.markdown("🔗 **LinkedIn:** https://www.linkedin.com")
+        st.markdown("🔗 **LinkedIn:** https://www.linkedin.com/in/munei-mugeri-09502b14b/")
 
     st.divider()
 
@@ -200,7 +158,7 @@ elif menu == "Publications":
 # ==================================================
 # STEM Data Explorer (Weather, Forecast, Maps)
 # ==================================================
-elif menu == "STEM Data Explorer":
+elif menu == "Weather data & forecasts":
     st.title("🌦️ Climate & Weather Explorer")
 
     selected_cities = st.multiselect(
@@ -252,7 +210,7 @@ elif menu == "STEM Data Explorer":
 
         # ---------------- FORECAST ----------------
         st.divider()
-        st.subheader("⏱️ 5-Day Time-Series Forecast")
+        st.subheader("5-Day Time-Series Forecast")
 
         city_forecast = st.selectbox(
             "Select city for forecast",
@@ -277,4 +235,5 @@ elif menu == "Contact":
     """)
 
     st.info("📧 Email: muneidrummer@gmail.com")
-    st.success("🔗 LinkedIn: https://www.linkedin.com")
+    st.success("🔗 LinkedIn: https://www.linkedin.com/in/munei-mugeri-09502b14b/")
+
