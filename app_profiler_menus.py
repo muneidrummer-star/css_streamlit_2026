@@ -17,23 +17,23 @@ st.set_page_config(
 )
 
 # ==================================================
-# Dark Academic Theme
+# Light Academic Theme
 # ==================================================
 st.markdown("""
 <style>
 html, body, [class*="css"] {
-    background-color: #0e1117;
-    color: #e6e6e6;
+    background-color: #ffffff;
+    color: #1b1b1b;
     font-family: 'Segoe UI', sans-serif;
 }
 h1, h2, h3 {
-    color: #4fa3ff;
+    color: #1f77b4;
 }
 [data-testid="stSidebar"] {
-    background-color: #161b22;
+    background-color: #f0f2f6;
 }
 .stMetric {
-    background-color: #1f2933;
+    background-color: #e6e6e6;
     padding: 15px;
     border-radius: 10px;
 }
@@ -82,13 +82,6 @@ def get_forecast(city):
             })
         return pd.DataFrame(records)
     return None
-
-def get_base64_image(image_path):
-    with open(image_path, "rb") as img_file:
-        return base64.b64encode(img_file.read()).decode()
-
-def get_radar_tile_url():
-    return "https://tilecache.rainviewer.com/v2/radar/nowcast/256/{z}/{x}/{y}/2/1_1.png"
 
 # ==================================================
 # API Key & City Configuration
@@ -218,7 +211,16 @@ elif menu == "Weather and Climate Data Explorer":
         st.dataframe(weather_df.drop(columns=["Latitude", "Longitude"]), use_container_width=True)
         st.bar_chart(weather_df.set_index("City")["Temperature (°C)"])
 
+        st.subheader("🗺️ Weather Map")
 
+        temp_layer = pdk.Layer(
+            "ScatterplotLayer",
+            data=weather_df,
+            get_position='[Longitude, Latitude]',
+            get_radius=45000,
+            get_fill_color='[255, 140 - Temperature * 4, 0]',
+            pickable=True
+        )
 
         view_state = pdk.ViewState(
             latitude=weather_df["Latitude"].mean(),
@@ -228,7 +230,7 @@ elif menu == "Weather and Climate Data Explorer":
 
         st.pydeck_chart(
             pdk.Deck(
-                layers=[temp_layer, radar_layer],
+                layers=[temp_layer],
                 initial_view_state=view_state,
                 tooltip={"text": "{City}\nTemp: {Temperature (°C)} °C"}
             )
@@ -251,4 +253,3 @@ elif menu == "Contact":
     st.markdown("**Open to collaborations, research partnerships, and climate-related projects.**")
     st.info("📧 Email: muneidrummer@gmail.com")
     st.success("🔗 LinkedIn: https://www.linkedin.com/in/munei-mugeri-09502b14b/")
-
