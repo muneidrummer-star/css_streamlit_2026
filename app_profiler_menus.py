@@ -105,7 +105,7 @@ def get_forecast(city):
 st.sidebar.title("🧭 Navigation")
 menu = st.sidebar.radio(
     "Go to:",
-    ["Researcher Profile", "Publications", "STEM Data Explorer", "Contact"]
+    ["Researcher Profile", "Publications", "Weather and Climate data explorer", "Contact"]
 )
 
 # ==================================================
@@ -138,7 +138,7 @@ if menu == "Researcher Profile":
 
         with name_col:
             st.subheader("Mr. Munei Mugeri")
-            st.markdown("**Meteorologist | Climate & Atmospheric Scientist**")
+            st.markdown("**Meteorologist | Remote Sensing Scientist**")
 
         with photo_col:
             image_path = os.path.join(os.path.dirname(__file__), "myself.jpg")
@@ -151,18 +151,17 @@ if menu == "Researcher Profile":
             )
 
         st.markdown("""
-        I am a meteorology researcher specializing in **climate variability,
-        weather extremes, and atmospheric data analysis**, with a strong focus
-        on Southern African climate systems and convective weather phenomena.
+        I am a meteorology researcher specializing in radars, satellites and lightning detection networks with a strong focus
+        on Southern African climate systems.
         """)
 
         st.markdown("""
-        **🏛️ Institution:** University of Pretoria  
-        **📍 Focus Area:** Climate analysis & weather modeling  
-        **🔬 Research Interests:** Climate change, extremes, environmental data science  
+        **🏛️ Institution:** South African Weather Service  
+        **📍 Focus Area:** Remote Sensing Research  
+        **🔬 Research Interests:** Radar algorithms, nowcasting, Hail estimates 
         """)
 
-        st.markdown("🔗 **LinkedIn:** https://www.linkedin.com")
+        st.markdown("🔗 **LinkedIn:** https://www.linkedin.com/in/munei-mugeri-09502b14b/")
 
     st.divider()
 
@@ -258,7 +257,7 @@ elif menu == "STEM Data Explorer":
         ))
 
         st.divider()
-        st.subheader("⏱️ 5-Day Time-Series Forecast")
+        st.subheader("5-Day Time-Series Forecast")
 
         city_forecast = st.selectbox(
             "Select city for forecast",
@@ -276,14 +275,15 @@ elif menu == "STEM Data Explorer":
 # Contact
 # ==================================================
 elif menu == "Contact":
-    st.title("📬 Contact")
+    st.title("Contact")
 
     st.markdown("""
     **Open to collaborations, research partnerships, and climate-related projects.**
     """)
 
     st.info("📧 Email: muneidrummer@gmail.com")
-    st.success("🔗 LinkedIn: https://www.linkedin.com")
+    st.success("🔗 LinkedIn: https://www.linkedin.com/in/munei-mugeri-09502b14b/")
+
 
 
 
