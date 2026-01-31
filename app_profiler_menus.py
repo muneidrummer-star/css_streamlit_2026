@@ -1,85 +1,110 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
 import requests
 from datetime import datetime
+import pydeck as pdk
 
 # ==================================================
-# USER CONFIGURATION (EDIT HERE)
-# ==================================================
-OPENWEATHER_API_KEY = "ed62b3f8bd037b703286ac1ac37e39e8"
-
-DEFAULT_CITIES = [
-    "Pretoria",
-    "Johannesburg",
-    "Cape Town",
-    "Durban",
-    "Polokwane"
-]
-
-# ==================================================
-# Page Config
+# Page Configuration
 # ==================================================
 st.set_page_config(
-    page_title="Researcher Profile | STEM & Climate Explorer",
+    page_title="Researcher Profile | Climate & STEM Explorer",
     page_icon="🌍",
     layout="wide"
 )
 
 # ==================================================
-# Custom Academic Theme (CSS)
+# API KEY (from Streamlit Secrets)
 # ==================================================
-st.markdown("""
-<style>
-html, body, [class*="css"] {
-    font-family: 'Segoe UI', sans-serif;
+API_KEY = st.secrets["OPENWEATHER_API_KEY"]
+
+# ==================================================
+# City Configuration (South Africa)
+# ==================================================
+CITIES = {
+    "Pretoria": {"lat": -25.7479, "lon": 28.2293},
+    "Johannesburg": {"lat": -26.2041, "lon": 28.0473},
+    "Cape Town": {"lat": -33.9249, "lon": 18.4241},
+    "Durban": {"lat": -29.8587, "lon": 31.0218},
+    "Polokwane": {"lat": -23.8962, "lon": 29.4486}
 }
-h1, h2, h3 {
-    color: #1f3c88;
-}
-.stMetric {
-    background-color: #f5f7fa;
-    padding: 15px;
-    border-radius: 10px;
-}
-[data-testid="stSidebar"] {
-    background-color: #f0f2f6;
-}
-</style>
-""", unsafe_allow_html=True)
+
+# ==================================================
+# Dark / Light Mode Toggle
+# ==================================================
+st.sidebar.title("⚙️ Settings")
+theme_mode = st.sidebar.radio("Theme", ["Light Mode", "Dark Mode"])
+
+if theme_mode == "Dark Mode":
+    st.markdown("""
+    <style>
+    html, body, [class*="css"] {
+        background-color: #0e1117;
+        color: #e0e0e0;
+    }
+    h1, h2, h3 {
+        color: #4fa3ff;
+    }
+    [data-testid="stSidebar"] {
+        background-color: #161b22;
+    }
+    .stMetric {
+        background-color: #1f2933;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+else:
+    st.markdown("""
+    <style>
+    html, body, [class*="css"] {
+        font-family: 'Segoe UI', sans-serif;
+    }
+    h1, h2, h3 {
+        color: #1f3c88;
+    }
+    [data-testid="stSidebar"] {
+        background-color: #f0f2f6;
+    }
+    .stMetric {
+        background-color: #f5f7fa;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
 # ==================================================
 # Helper Functions
 # ==================================================
 def load_cv():
-    with open("Munei_Mugeri_CV.pdf", "rb") as file:
-        return file.read()
+    with open("Munei_Mugeri_CV.pdf", "rb") as f:
+        return f.read()
 
 def get_current_weather(city):
     url = (
-        f"https://api.openweathermap.org/data/2.5/weather"
-        f"?q={city}&appid={OPENWEATHER_API_KEY}&units=metric"
+        "https://api.openweathermap.org/data/2.5/weather"
+        f"?q={city}&appid={API_KEY}&units=metric"
     )
-    response = requests.get(url)
-    if response.status_code == 200:
-        data = response.json()
+    r = requests.get(url)
+    if r.status_code == 200:
+        d = r.json()
         return {
             "City": city,
-            "Temperature (°C)": data["main"]["temp"],
-            "Humidity (%)": data["main"]["humidity"],
-            "Condition": data["weather"][0]["description"].title(),
-            "Wind (m/s)": data["wind"]["speed"]
+            "Temperature (°C)": d["main"]["temp"],
+            "Humidity (%)": d["main"]["humidity"],
+            "Condition": d["weather"][0]["description"].title(),
+            "Wind (m/s)": d["wind"]["speed"],
+            "Latitude": d["coord"]["lat"],
+            "Longitude": d["coord"]["lon"]
         }
     return None
 
-def get_weather_forecast(city):
+def get_forecast(city):
     url = (
-        f"https://api.openweathermap.org/data/2.5/forecast"
-        f"?q={city}&appid={OPENWEATHER_API_KEY}&units=metric"
+        "https://api.openweathermap.org/data/2.5/forecast"
+        f"?q={city}&appid={API_KEY}&units=metric"
     )
-    response = requests.get(url)
-    if response.status_code == 200:
-        data = response.json()
+    r = requests.get(url)
+    if r.status_code == 200:
+        data = r.json()
         records = []
         for item in data["list"]:
             records.append({
@@ -110,27 +135,26 @@ if menu == "Researcher Profile":
     with col1:
         st.image(
             "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
-            use_column_width=True
+            use_container_width=True
         )
 
     with col2:
         st.subheader("Mr. Munei Mugeri")
-        st.markdown("**Meteorologist | Remote Sensing Scientist**")
+        st.markdown("**Meteorologist | Climate & Atmospheric Scientist**")
 
         st.markdown("""
-        I am a meteorology researcher focused on **climate variability,
-        weather extremes, and data-driven atmospheric analysis**.
+        I am a meteorology researcher specializing in **climate variability,
+        weather extremes, and atmospheric data analysis**, with a focus on
+        Southern African climate systems.
         """)
 
         st.markdown("""
-        **🏛️ Institution:** South African Weather Service  
-        **📍 Current Work:** Climate data analysis & weather modeling  
-        **🔬 Interests:** Radar algorithms, Moisture sources and transport, Weather Modelling  
+        **🏛️ Institution:** University of Pretoria  
+        **📍 Focus Area:** Climate analysis & weather modeling  
+        **🔬 Interests:** Climate change, extremes, environmental data science  
         """)
 
-        st.markdown(
-            "🔗 **LinkedIn:** [linkedin.com/in/munei-mugeri](https://www.linkedin.com)"
-        )
+        st.markdown("🔗 **LinkedIn:** https://www.linkedin.com")
 
     st.divider()
 
@@ -144,7 +168,6 @@ if menu == "Researcher Profile":
 
     st.divider()
 
-    st.subheader("📊 Research Snapshot")
     c1, c2, c3, c4 = st.columns(4)
     c1.metric("Years Experience", "5+")
     c2.metric("Projects", "12")
@@ -157,57 +180,86 @@ if menu == "Researcher Profile":
 elif menu == "Publications":
     st.title("📚 Publications")
 
-    uploaded_file = st.file_uploader("Upload Publications CSV", type="csv")
-
-    if uploaded_file:
-        publications = pd.read_csv(uploaded_file)
-        st.dataframe(publications, use_container_width=True)
+    uploaded = st.file_uploader("Upload Publications CSV", type="csv")
+    if uploaded:
+        df = pd.read_csv(uploaded)
+        st.dataframe(df, use_container_width=True)
 
         keyword = st.text_input("🔎 Filter by keyword")
         if keyword:
-            publications = publications[
-                publications.apply(
-                    lambda row: keyword.lower() in row.astype(str).str.lower().values,
-                    axis=1
-                )
-            ]
-            st.dataframe(publications, use_container_width=True)
+            df = df[df.apply(
+                lambda r: keyword.lower() in r.astype(str).str.lower().values,
+                axis=1
+            )]
+            st.dataframe(df, use_container_width=True)
 
-        if "Year" in publications.columns:
+        if "Year" in df.columns:
             st.subheader("📈 Publication Trends")
-            st.line_chart(publications["Year"].value_counts().sort_index())
+            st.line_chart(df["Year"].value_counts().sort_index())
 
 # ==================================================
-# STEM Data Explorer
+# STEM Data Explorer (Weather, Forecast, Maps)
 # ==================================================
 elif menu == "STEM Data Explorer":
-    st.title("🧪 STEM Data Explorer")
+    st.title("🌦️ Climate & Weather Explorer")
 
-    cities = st.multiselect(
+    selected_cities = st.multiselect(
         "Select cities",
-        DEFAULT_CITIES,
-        default=[DEFAULT_CITIES[0]]
+        list(CITIES.keys()),
+        default=["Pretoria"]
     )
 
-    if cities:
-        st.subheader("🌦️ Current Weather Conditions")
-        weather_data = []
+    if selected_cities:
+        st.subheader("📊 Current Weather Conditions")
 
-        for city in cities:
+        weather_data = []
+        for city in selected_cities:
             data = get_current_weather(city)
             if data:
                 weather_data.append(data)
 
         weather_df = pd.DataFrame(weather_data)
-        st.dataframe(weather_df, use_container_width=True)
+        st.dataframe(
+            weather_df.drop(columns=["Latitude", "Longitude"]),
+            use_container_width=True
+        )
+
         st.bar_chart(weather_df.set_index("City")["Temperature (°C)"])
 
+        # ---------------- WEATHER MAP ----------------
+        st.subheader("🗺️ Weather Map (Temperature Intensity)")
+
+        layer = pdk.Layer(
+            "ScatterplotLayer",
+            data=weather_df,
+            get_position='[Longitude, Latitude]',
+            get_radius=45000,
+            get_fill_color='[255, 140 - Temperature * 4, 0]',
+            pickable=True
+        )
+
+        view_state = pdk.ViewState(
+            latitude=weather_df["Latitude"].mean(),
+            longitude=weather_df["Longitude"].mean(),
+            zoom=5
+        )
+
+        st.pydeck_chart(pdk.Deck(
+            layers=[layer],
+            initial_view_state=view_state,
+            tooltip={"text": "{City}\nTemp: {Temperature (°C)} °C"}
+        ))
+
+        # ---------------- FORECAST ----------------
         st.divider()
+        st.subheader("⏱️ 5-Day Time-Series Forecast")
 
-        st.subheader("⏱️ 5-Day Weather Forecast (Time Series)")
-        forecast_city = st.selectbox("Choose city for forecast", cities)
+        city_forecast = st.selectbox(
+            "Select city for forecast",
+            selected_cities
+        )
 
-        forecast_df = get_weather_forecast(forecast_city)
+        forecast_df = get_forecast(city_forecast)
         if forecast_df is not None:
             forecast_df = forecast_df.set_index("Datetime")
             st.line_chart(
@@ -221,7 +273,7 @@ elif menu == "Contact":
     st.title("📬 Contact")
 
     st.markdown("""
-    **Open to collaborations, research discussions, and data projects.**
+    **Open to collaborations, research partnerships, and climate-related projects.**
     """)
 
     st.info("📧 Email: muneidrummer@gmail.com")
