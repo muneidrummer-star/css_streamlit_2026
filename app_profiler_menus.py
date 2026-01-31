@@ -42,10 +42,10 @@ def load_cv():
     with open("Munei_Mugeri_CV.pdf", "rb") as file:
         return file.read()
 
-def get_current_weather(city = "Pretoria", ed62b3f8bd037b703286ac1ac37e39e8"):
+def get_current_weather(city, api_key):
     url = (
         f"https://api.openweathermap.org/data/2.5/weather"
-        f"?q={Pretoria}&appid={ed62b3f8bd037b703286ac1ac37e39e8}&units=metric"
+        f"?q={city}&appid={api_key}&units=metric"
     )
     response = requests.get(url)
     if response.status_code == 200:
@@ -59,10 +59,10 @@ def get_current_weather(city = "Pretoria", ed62b3f8bd037b703286ac1ac37e39e8"):
         }
     return None
 
-def get_weather_forecast(Pretoria, api_key = "ed62b3f8bd037b703286ac1ac37e39e8"):
+def get_weather_forecast(city, api_key):
     url = (
         f"https://api.openweathermap.org/data/2.5/forecast"
-        f"?q={Pretoria}&appid={ed62b3f8bd037b703286ac1ac37e39e8}&units=metric"
+        f"?q={city}&appid={api_key}&units=metric"
     )
     response = requests.get(url)
     if response.status_code == 200:
@@ -83,7 +83,7 @@ def get_weather_forecast(Pretoria, api_key = "ed62b3f8bd037b703286ac1ac37e39e8")
 st.sidebar.title("🧭 Navigation")
 menu = st.sidebar.radio(
     "Go to:",
-    ["Researcher Profile", "Publications", "Weather Data", "Contact"]
+    ["Researcher Profile", "Publications", "STEM Data Explorer", "Contact"]
 )
 
 # ==================================================
@@ -220,5 +220,3 @@ elif menu == "Contact":
 
     st.info("📧 Email: muneidrummer@gmail.com")
     st.success("🔗 LinkedIn: https://www.linkedin.com")
-
-
