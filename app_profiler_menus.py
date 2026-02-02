@@ -179,9 +179,8 @@ elif menu == "Publications":
             st.subheader("📈 Publication Trends")
             st.line_chart(df["Year"].value_counts().sort_index())
 
-# ==================================================
-# Weather & Climate Data Explorer (NO MAP)
-# ==================================================
+
+# Weather & Climate Data Explorer
 elif menu == "Weather and Climate Data Explorer":
     st.title("🌦️ Weather & Climate Explorer")
 
@@ -239,6 +238,7 @@ elif menu == "Contact":
     st.markdown("**For collaborations, research partnerships, and climate-related projects, you can reach me at:**")
     st.info("📧 Email: muneidrummer@gmail.com")
     st.success("🔗 LinkedIn: https://www.linkedin.com/in/munei-mugeri-09502b14b/")
+
 
 
 
