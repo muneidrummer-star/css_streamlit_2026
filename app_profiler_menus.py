@@ -112,7 +112,7 @@ if menu == "Researcher Profile":
             width, height = storm_img.size
             new_height = int(width * 1.5)  # make height 1.5x width for portrait effect
             storm_img = storm_img.resize((width, new_height))
-            st.image(storm_img, caption="Thunderstorms", use_container_width=True)
+            st.image(storm_img, use_container_width=True)
         else:
             st.warning("Storm image not found.")
 
@@ -121,7 +121,7 @@ if menu == "Researcher Profile":
         name_col, photo_col = st.columns([3, 1])
         with name_col:
             st.subheader("Mr. Munei Mugeri")
-            st.markdown("**Meteorologist | Remote Sensing Scientist**")
+            st.markdown("**Meteorologist | Weather and Climate variability Scientist**")
         with photo_col:
             image_path = os.path.join(os.path.dirname(__file__), "myself.jpg")
             if os.path.exists(image_path):
@@ -131,13 +131,13 @@ if menu == "Researcher Profile":
                 st.warning("Profile image not found.")
 
         st.markdown("""
-        I am a meteorology researcher specializing in radars, satellites, and lightning detection networks 
-        with a strong focus on Southern African climate systems.
+        I am a meteorology researcher specializing in Extreme weather events, climate variability
+        and lightning detection networks, with a strong focus on Southern African climate systems.
         """)
         st.markdown("""
         **🏛️ Institution:** South African Weather Service  
-        **📍 Focus Area:** Remote Sensing Research  
-        **🔬 Research Interests:** Radar algorithms, nowcasting, hail estimates 
+        **📍 Focus Area:** Weather and climate variability Research  
+        **🔬 Research Interests:** Extreme weather events, nowcasting, Temperature anomalies 
         """)
         st.markdown("🔗 **LinkedIn:** https://www.linkedin.com/in/munei-mugeri-09502b14b/")
 
@@ -239,6 +239,7 @@ elif menu == "Contact":
     st.markdown("**For collaborations, research partnerships, and climate-related projects, you can reach me at:**")
     st.info("📧 Email: muneidrummer@gmail.com")
     st.success("🔗 LinkedIn: https://www.linkedin.com/in/munei-mugeri-09502b14b/")
+
 
 
 
